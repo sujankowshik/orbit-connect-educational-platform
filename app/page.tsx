@@ -47,16 +47,16 @@ export default function Home() {
           {/* CTA Button */}
           <div className="mt-12 flex flex-col sm:flex-row gap-4 justify-center">
             <Link
-              href="/satellite-coverage"
+              href="/satellite-tracker"
               className="px-8 py-3 bg-primary text-primary-foreground rounded-lg font-semibold hover:opacity-90 transition-opacity inline-block"
             >
-              Explore Satellites
+              Launch Tracker
             </Link>
             <Link
               href="/emergency-mode"
               className="px-8 py-3 border border-primary text-primary rounded-lg font-semibold hover:bg-primary hover:text-primary-foreground transition-colors inline-block"
             >
-              Emergency Communication
+              Simulation
             </Link>
           </div>
         </div>
@@ -88,6 +88,81 @@ export default function Home() {
                 <h3 className="text-lg font-bold text-primary mb-3">{item.title}</h3>
                 <p className="text-sm text-muted-foreground">{item.desc}</p>
               </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Features Section */}
+      <section className="py-20 px-4">
+        <div className="max-w-6xl mx-auto">
+          <h2 className="text-3xl sm:text-4xl font-bold text-center text-foreground mb-12">Explore Our Platform</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {[
+              {
+                title: "3D Satellite Tracker",
+                desc: "Real-time visualization of satellite networks with live position tracking",
+                link: "/satellite-tracker",
+                icon: "🛰️",
+              },
+              {
+                title: "Emergency Simulation",
+                desc: "Interactive timeline showing disaster response with satellite communication",
+                link: "/emergency-mode",
+                icon: "🚨",
+              },
+              {
+                title: "Disaster Case Studies",
+                desc: "Real-world examples of how satellites saved lives during actual disasters",
+                link: "/disaster-cases",
+                icon: "📚",
+              },
+              {
+                title: "Cost-Benefit Calculator",
+                desc: "Compare satellite vs. traditional communication infrastructure costs",
+                link: "/calculator",
+                icon: "💰",
+              },
+              {
+                title: "Educational Quizzes",
+                desc: "Learn about satellite technology and earn certification badges",
+                link: "/learn",
+                icon: "🎓",
+              },
+              {
+                title: "Community Hub",
+                desc: "Share and discover stories from satellite technology users worldwide",
+                link: "/community",
+                icon: "🌐",
+              },
+              {
+                title: "API Dashboard",
+                desc: "Real-time satellite data and integration endpoints for developers",
+                link: "/api-dashboard",
+                icon: "📡",
+              },
+              {
+                title: "Satellite Coverage",
+                desc: "Global coverage maps showing satellite constellation reach",
+                link: "/satellite-coverage",
+                icon: "🗺️",
+              },
+              {
+                title: "Accessibility",
+                desc: "Inclusive features for all users - multi-language, high contrast, screen readers",
+                link: "/accessibility",
+                icon: "♿",
+              },
+            ].map((feature, i) => (
+              <Link
+                key={i}
+                href={feature.link}
+                className="group bg-card border border-border rounded-lg p-6 hover:border-primary hover:bg-card/80 transition-all"
+              >
+                <div className="text-4xl mb-3">{feature.icon}</div>
+                <h3 className="text-lg font-bold text-foreground mb-2 group-hover:text-primary transition-colors">{feature.title}</h3>
+                <p className="text-sm text-muted-foreground">{feature.desc}</p>
+              </Link>
             ))}
           </div>
         </div>

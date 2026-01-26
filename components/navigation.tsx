@@ -8,10 +8,13 @@ export default function Navigation() {
 
   const links = [
     { href: "/", label: "Home" },
-    { href: "/satellite-coverage", label: "Satellite Coverage" },
-    { href: "/emergency-mode", label: "Emergency Mode" },
-    { href: "/space-debris", label: "Space Debris" },
-    { href: "/about", label: "About" },
+    { href: "/satellite-tracker", label: "Tracker" },
+    { href: "/satellite-coverage", label: "Coverage" },
+    { href: "/emergency-mode", label: "Emergency" },
+    { href: "/disaster-cases", label: "Cases" },
+    { href: "/calculator", label: "Calculator" },
+    { href: "/learn", label: "Learn" },
+    { href: "/community", label: "Community" },
   ]
 
   return (
