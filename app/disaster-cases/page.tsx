@@ -123,127 +123,132 @@ export default function DisasterCases() {
 
   return (
     <main className="min-h-screen bg-background pt-20">
-      <div className="max-w-6xl mx-auto px-4 py-8 space-y-8">
-        <div className="text-center space-y-2 mb-8">
-          <h1 className="text-4xl font-bold text-foreground">
-            Real Disaster Case Studies
+      <div className="max-w-7xl mx-auto px-4 py-12 space-y-10">
+        <div className="text-center space-y-4 mb-10 animate-slide-in-up">
+          <div className="inline-block px-4 py-2 rounded-full glass-effect text-primary text-sm font-semibold">
+            Real-World Impact
+          </div>
+          <h1 className="text-5xl font-bold gradient-text">
+            Disaster Case Studies
           </h1>
-          <p className="text-muted-foreground">
+          <p className="text-lg text-muted-foreground">
             How satellite communication saved lives during actual disasters
           </p>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Case List */}
-          <div className="lg:col-span-1 space-y-3">
-            <h2 className="text-lg font-bold text-foreground mb-4">Cases</h2>
-            {cases.map((c) => (
-              <button
-                key={c.id}
-                onClick={() => setSelectedCase(c)}
-                className={`w-full text-left p-4 rounded-lg border transition-all ${
-                  selectedCase?.id === c.id
-                    ? 'bg-primary/20 border-primary'
-                    : 'bg-card border-border hover:border-primary'
-                }`}
-              >
-                <div className="flex items-start gap-3">
-                  <span className="text-2xl">{c.icon}</span>
-                  <div className="min-w-0">
-                    <h3 className="font-semibold text-sm text-foreground truncate">
-                      {c.title}
-                    </h3>
-                    <p className="text-xs text-muted-foreground">{c.type}</p>
+          <div className="lg:col-span-1">
+            <div className="glass-effect rounded-2xl p-6 border border-primary/30 space-y-4 sticky top-24 max-h-[calc(100vh-200px)] overflow-y-auto">
+              <h2 className="text-xl font-bold text-foreground">Case Studies</h2>
+              {cases.map((c, idx) => (
+                <button
+                  key={c.id}
+                  onClick={() => setSelectedCase(c)}
+                  className={`w-full text-left p-4 rounded-xl border-2 transition-all duration-300 transform hover:scale-102 animate-slide-in-up ${
+                    selectedCase?.id === c.id
+                      ? 'glass-effect border-primary/80 bg-primary/20 glow-effect'
+                      : 'glass-effect border-border/50 hover:border-primary'
+                  }`}
+                  style={{ animationDelay: `${idx * 50}ms` }}
+                >
+                  <div className="flex items-start gap-3">
+                    <span className="text-3xl">{c.icon}</span>
+                    <div className="min-w-0 flex-1">
+                      <h3 className="font-semibold text-sm text-foreground">
+                        {c.title}
+                      </h3>
+                      <p className="text-xs text-muted-foreground mt-1">{c.type}</p>
+                      <div className="flex items-center gap-1 mt-2">
+                        {Array.from({ length: Math.ceil(c.impact / 3) }).map((_, i) => (
+                          <div key={i} className="w-1 h-1 bg-primary rounded-full"></div>
+                        ))}
+                      </div>
+                    </div>
                   </div>
-                </div>
-              </button>
-            ))}
+                </button>
+              ))}
+            </div>
           </div>
 
           {/* Case Details */}
           {selectedCase && (
-            <div className="lg:col-span-2 space-y-4">
-              <Card className="bg-card border-border p-6">
-                <div className="flex items-start justify-between mb-4">
-                  <div className="flex items-center gap-4">
-                    <span className="text-5xl">{selectedCase.icon}</span>
-                    <div>
-                      <h2 className="text-3xl font-bold text-foreground">
-                        {selectedCase.title}
-                      </h2>
-                      <Badge variant="outline" className="mt-2">
+            <div className="lg:col-span-2 space-y-6 animate-slide-in-up">
+              <div className="glass-effect border border-primary/30 rounded-2xl p-8 glow-effect">
+                <div className="flex items-start gap-6 mb-8">
+                  <span className="text-7xl">{selectedCase.icon}</span>
+                  <div>
+                    <h2 className="text-4xl font-bold text-foreground mb-3">
+                      {selectedCase.title}
+                    </h2>
+                    <div className="flex gap-2 flex-wrap">
+                      <span className="px-4 py-2 rounded-full bg-primary/20 text-primary text-sm font-bold">
                         {selectedCase.type}
-                      </Badge>
+                      </span>
+                      <span className="px-4 py-2 rounded-full bg-destructive/20 text-destructive text-sm font-bold">
+                        Impact: {selectedCase.impact}/10
+                      </span>
                     </div>
                   </div>
                 </div>
 
-                <div className="grid grid-cols-3 gap-4 mb-6">
-                  <div className="flex items-center gap-2 text-sm">
-                    <Calendar className="w-4 h-4 text-primary" />
-                    <span className="text-muted-foreground">
-                      {selectedCase.date}
-                    </span>
+                <div className="grid grid-cols-3 gap-6 mb-8 pb-8 border-b border-primary/20">
+                  <div className="bg-background/50 rounded-lg p-4 border border-primary/20">
+                    <Calendar className="w-5 h-5 text-primary mb-2" />
+                    <p className="text-xs text-muted-foreground font-semibold">Date</p>
+                    <p className="text-sm text-foreground font-bold mt-1">{selectedCase.date}</p>
                   </div>
-                  <div className="flex items-center gap-2 text-sm">
-                    <MapPin className="w-4 h-4 text-primary" />
-                    <span className="text-muted-foreground">
-                      {selectedCase.location}
-                    </span>
+                  <div className="bg-background/50 rounded-lg p-4 border border-primary/20">
+                    <MapPin className="w-5 h-5 text-primary mb-2" />
+                    <p className="text-xs text-muted-foreground font-semibold">Location</p>
+                    <p className="text-sm text-foreground font-bold mt-1">{selectedCase.location}</p>
                   </div>
-                  <div className="flex items-center gap-2 text-sm">
-                    <TrendingUp className="w-4 h-4 text-primary" />
-                    <span className="text-muted-foreground">
-                      Impact Level: {selectedCase.impact}/10
-                    </span>
+                  <div className="bg-background/50 rounded-lg p-4 border border-accent/20">
+                    <Users className="w-5 h-5 text-accent mb-2" />
+                    <p className="text-xs text-muted-foreground font-semibold">Lives Saved</p>
+                    <p className="text-sm text-accent font-bold mt-1">{selectedCase.lives.toLocaleString()}</p>
                   </div>
                 </div>
 
-                <div className="space-y-4 border-t border-border pt-4">
+                <div className="space-y-6">
                   <div>
-                    <h3 className="font-semibold text-foreground mb-2">
-                      Event Description
-                    </h3>
-                    <p className="text-sm text-muted-foreground leading-relaxed">
+                    <h3 className="font-bold text-lg text-foreground mb-3">Event Description</h3>
+                    <p className="text-muted-foreground leading-relaxed">
                       {selectedCase.description}
                     </p>
                   </div>
 
-                  <div>
-                    <h3 className="font-semibold text-primary mb-2">
-                      Satellite Communication Role
-                    </h3>
-                    <p className="text-sm text-muted-foreground leading-relaxed">
+                  <div className="bg-primary/10 rounded-lg p-6 border border-primary/20">
+                    <h3 className="font-bold text-lg text-primary mb-3">Satellite Communication Role</h3>
+                    <p className="text-foreground leading-relaxed">
                       {selectedCase.satelliteRole}
                     </p>
                   </div>
 
-                  <div>
-                    <h3 className="font-semibold text-accent mb-2">
-                      Outcome & Impact
-                    </h3>
-                    <p className="text-sm text-muted-foreground leading-relaxed">
+                  <div className="bg-accent/10 rounded-lg p-6 border border-accent/20">
+                    <h3 className="font-bold text-lg text-accent mb-3">Outcome & Impact</h3>
+                    <p className="text-foreground leading-relaxed">
                       {selectedCase.outcome}
                     </p>
                   </div>
                 </div>
-              </Card>
+              </div>
 
-              <Card className="bg-gradient-to-r from-primary/10 to-accent/10 border-primary/30 p-6">
-                <div className="flex items-center gap-4">
-                  <div className="w-16 h-16 bg-primary/20 rounded-lg flex items-center justify-center">
-                    <Users className="w-8 h-8 text-primary" />
+              <div className="glass-effect border border-accent/30 rounded-2xl p-8 glow-effect bg-gradient-to-r from-accent/10 to-primary/10">
+                <div className="flex items-center gap-6">
+                  <div className="w-20 h-20 bg-gradient-to-br from-primary to-accent rounded-2xl flex items-center justify-center glow-effect">
+                    <Users className="w-10 h-10 text-primary-foreground" />
                   </div>
                   <div>
-                    <p className="text-sm text-muted-foreground">
-                      Estimated Lives Impacted Positively
+                    <p className="text-sm text-muted-foreground font-semibold uppercase tracking-wider mb-2">
+                      Lives Positively Impacted
                     </p>
                     <p className="text-3xl font-bold text-foreground">
                       {selectedCase.lives.toLocaleString()}+
                     </p>
                   </div>
                 </div>
-              </Card>
+              </div>
             </div>
           )}
 

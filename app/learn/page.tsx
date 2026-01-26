@@ -178,87 +178,111 @@ export default function Learn() {
 
   return (
     <main className="min-h-screen bg-background pt-20">
-      <div className="max-w-6xl mx-auto px-4 py-8 space-y-8">
+      <div className="max-w-7xl mx-auto px-4 py-12 space-y-12">
         {!selectedQuiz ? (
           <>
-            <div className="text-center space-y-2 mb-8">
-              <h1 className="text-4xl font-bold text-foreground">
+            <div className="text-center space-y-4 mb-12 animate-slide-in-up">
+              <div className="inline-block px-4 py-2 rounded-full glass-effect text-primary text-sm font-semibold">
+                Master Satellite Technology
+              </div>
+              <h1 className="text-5xl font-bold gradient-text">
                 Educational Platform
               </h1>
-              <p className="text-muted-foreground">
+              <p className="text-lg text-muted-foreground">
                 Learn about satellite technology and earn certification badges
               </p>
             </div>
 
-            <div className="space-y-4">
-              <h2 className="text-2xl font-bold text-foreground">Available Courses</h2>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {quizzes.map((quiz) => (
-                  <Card key={quiz.id} className="bg-card border-border p-6 hover:border-primary transition-colors">
-                    <div className="flex items-start justify-between mb-3">
-                      <Badge className={getDifficultyColor(quiz.difficulty)}>
-                        {quiz.difficulty.charAt(0).toUpperCase() + quiz.difficulty.slice(1)}
-                      </Badge>
+            <div className="space-y-6 animate-slide-in-up" style={{ animationDelay: '100ms' }}>
+              <div className="flex items-center justify-between">
+                <h2 className="text-3xl font-bold text-foreground">Available Courses</h2>
+                <span className="px-4 py-2 rounded-full bg-primary/20 text-primary text-sm font-bold">{quizzes.length} Courses</span>
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {quizzes.map((quiz, idx) => (
+                  <div
+                    key={quiz.id}
+                    className="glass-effect border border-primary/30 rounded-2xl p-8 hover:border-primary/60 card-hover group glow-effect"
+                    style={{ animationDelay: `${idx * 50}ms` }}
+                  >
+                    <div className="flex items-start justify-between mb-4">
+                      <span className={`px-4 py-2 rounded-full text-xs font-bold ${
+                        quiz.difficulty === 'beginner' ? 'bg-green-500/20 text-green-400' :
+                        quiz.difficulty === 'intermediate' ? 'bg-yellow-500/20 text-yellow-400' :
+                        'bg-destructive/20 text-destructive'
+                      }`}>
+                        {quiz.difficulty.toUpperCase()}
+                      </span>
                       {quiz.completed && (
-                        <CheckCircle2 className="w-5 h-5 text-green-500" />
+                        <div className="flex items-center gap-1 px-3 py-1 rounded-full bg-green-500/20 text-green-400 text-xs font-bold">
+                          <CheckCircle2 className="w-4 h-4" />
+                          Complete
+                        </div>
                       )}
                     </div>
 
-                    <h3 className="text-lg font-bold text-foreground mb-2">
+                    <h3 className="text-xl font-bold text-foreground mb-3 group-hover:text-primary transition-colors">
                       {quiz.title}
                     </h3>
-                    <p className="text-sm text-muted-foreground mb-4">
+                    <p className="text-sm text-muted-foreground mb-5 leading-relaxed">
                       {quiz.description}
                     </p>
 
-                    <div className="flex gap-4 text-sm text-muted-foreground mb-4">
-                      <span>{quiz.questions} questions</span>
-                      <span>{quiz.duration} minutes</span>
+                    <div className="flex gap-6 text-sm text-muted-foreground mb-6 pb-6 border-b border-primary/20">
+                      <span className="flex items-center gap-2">
+                        <span className="w-1 h-1 bg-primary rounded-full"></span>
+                        {quiz.questions} Questions
+                      </span>
+                      <span className="flex items-center gap-2">
+                        <span className="w-1 h-1 bg-accent rounded-full"></span>
+                        {quiz.duration} Minutes
+                      </span>
                     </div>
 
-                    <Button
+                    <button
                       onClick={() => handleQuizStart(quiz)}
-                      className="w-full"
+                      className="w-full px-6 py-3 bg-gradient-to-r from-primary to-accent text-primary-foreground rounded-lg font-bold hover:shadow-lg hover:shadow-primary/50 transition-all duration-300"
                     >
-                      {quiz.completed ? 'Retake Quiz' : 'Start Quiz'}
-                    </Button>
+                      {quiz.completed ? 'Retake Course' : 'Start Learning'}
+                    </button>
 
                     {quiz.score !== undefined && (
-                      <p className="text-sm text-primary font-semibold mt-3">
-                        Score: {quiz.score}%
+                      <p className="text-sm text-accent font-bold mt-4 text-center">
+                        Last Score: {quiz.score}%
                       </p>
                     )}
-                  </Card>
+                  </div>
                 ))}
               </div>
             </div>
 
             {/* Certification */}
-            <Card className="bg-gradient-to-r from-primary/10 to-accent/10 border-primary/30 p-8">
-              <div className="text-center space-y-4">
-                <h2 className="text-2xl font-bold text-foreground">
-                  Certification Program
-                </h2>
-                <p className="text-muted-foreground max-w-2xl mx-auto">
-                  Complete all courses to earn your ORBIT-Connect Satellite Technology
-                  Certification badge, recognized globally for satellite education
-                </p>
-                <div className="flex justify-center gap-4">
+            <div className="glass-effect border border-primary/30 rounded-2xl p-12 glow-effect animate-slide-in-up" style={{ animationDelay: '200ms' }}>
+              <div className="text-center space-y-8">
+                <div>
+                  <h2 className="text-4xl font-bold gradient-text mb-3">
+                    Certification Program
+                  </h2>
+                  <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
+                    Complete all courses to earn your ORBIT-Connect Satellite Technology Certification badge
+                  </p>
+                </div>
+                <div className="flex justify-center gap-6">
                   {[1, 2, 3, 4].map((i) => (
                     <div
                       key={i}
-                      className={`w-16 h-16 rounded-full flex items-center justify-center font-bold ${
+                      className={`w-20 h-20 rounded-full flex items-center justify-center font-bold transition-all duration-300 ${
                         i <= 2
-                          ? 'bg-primary/30 text-primary'
-                          : 'bg-background border-2 border-border text-muted-foreground'
+                          ? 'bg-gradient-to-br from-primary to-accent text-primary-foreground glow-effect shadow-lg shadow-primary/50'
+                          : 'glass-effect border-2 border-primary/30 text-muted-foreground'
                       }`}
                     >
-                      {i <= 2 ? <CheckCircle2 className="w-6 h-6" /> : i}
+                      {i <= 2 ? <CheckCircle2 className="w-8 h-8" /> : <span className="font-bold text-lg">{i}</span>}
                     </div>
                   ))}
                 </div>
               </div>
-            </Card>
+            </div>
           </>
         ) : quizCompleted ? (
           <div className="max-w-2xl mx-auto">

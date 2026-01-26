@@ -54,35 +54,38 @@ export default function Calculator() {
 
   return (
     <main className="min-h-screen bg-background pt-20">
-      <div className="max-w-6xl mx-auto px-4 py-8 space-y-8">
-        <div className="text-center space-y-2 mb-8">
-          <h1 className="text-4xl font-bold text-foreground">
+      <div className="max-w-7xl mx-auto px-4 py-12 space-y-10">
+        <div className="text-center space-y-4 mb-10 animate-slide-in-up">
+          <div className="inline-block px-4 py-2 rounded-full glass-effect text-accent text-sm font-semibold">
+            Financial Planning
+          </div>
+          <h1 className="text-5xl font-bold gradient-text">
             Cost-Benefit Calculator
           </h1>
-          <p className="text-muted-foreground">
+          <p className="text-lg text-muted-foreground">
             Compare traditional vs. satellite communication infrastructure
           </p>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Input Panel */}
-          <Card className="bg-card border-border p-6 lg:col-span-1">
-            <h2 className="text-xl font-bold text-foreground mb-6">Scenario Setup</h2>
+          <div className="glass-effect border border-primary/30 rounded-2xl p-8 lg:col-span-1 glow-effect sticky top-24 h-fit animate-slide-in-up" style={{ animationDelay: '100ms' }}>
+            <h2 className="text-2xl font-bold text-foreground mb-8">Scenario Setup</h2>
 
-            <div className="space-y-6">
+            <div className="space-y-8">
               <div>
-                <label className="text-sm font-semibold text-foreground mb-3 block">
+                <label className="text-sm font-bold text-foreground mb-4 block uppercase tracking-wider">
                   Region Type
                 </label>
-                <div className="flex gap-2">
+                <div className="flex gap-3">
                   {['rural', 'urban', 'developing'].map((r) => (
                     <button
                       key={r}
                       onClick={() => setRegion(r)}
-                      className={`flex-1 px-4 py-2 rounded-lg border text-sm font-semibold transition-all ${
+                      className={`flex-1 px-4 py-3 rounded-lg border-2 text-sm font-bold transition-all duration-300 ${
                         region === r
-                          ? 'bg-primary text-primary-foreground border-primary'
-                          : 'bg-background border-border text-foreground hover:border-primary'
+                          ? 'bg-gradient-to-r from-primary to-accent text-primary-foreground border-primary shadow-lg shadow-primary/50'
+                          : 'glass-effect border-border/50 text-foreground hover:border-primary'
                       }`}
                     >
                       {r.charAt(0).toUpperCase() + r.slice(1)}
@@ -142,7 +145,7 @@ export default function Calculator() {
 
               <Button className="w-full">Recalculate</Button>
             </div>
-          </Card>
+          </div>
 
           {/* Results */}
           <div className="lg:col-span-2 space-y-4">

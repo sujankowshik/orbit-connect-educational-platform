@@ -171,9 +171,9 @@ export default function SatelliteTracker() {
 
   return (
     <main className="min-h-screen bg-background pt-20">
-      <div className="h-screen flex gap-6 p-6">
+      <div className="h-[calc(100vh-5rem)] flex gap-6 p-6">
         {/* 3D Scene */}
-        <div className="flex-1 bg-card rounded-lg overflow-hidden border border-border">
+        <div className="flex-1 glass-effect rounded-2xl overflow-hidden glow-effect border-2 border-primary/30">
           <SatelliteScene
             satellites={satellites}
             selectedSatellite={selectedSatellite}
@@ -182,10 +182,17 @@ export default function SatelliteTracker() {
         </div>
 
         {/* Info Panel */}
-        <div className="w-80 space-y-6 overflow-y-auto">
+        <div className="w-96 space-y-5 overflow-y-auto pr-2 scrollbar-hide">
+          {/* Header */}
+          <div className="glass-effect rounded-2xl p-6 border border-primary/30 animate-slide-in-up">
+            <h1 className="text-2xl font-bold gradient-text mb-2">Live Satellite Tracker</h1>
+            <p className="text-sm text-muted-foreground">Real-time orbital tracking</p>
+          </div>
+
           {/* Active Satellites */}
-          <div className="bg-card rounded-lg p-4 border border-border">
-            <h2 className="text-lg font-bold text-foreground mb-4">
+          <div className="glass-effect rounded-2xl p-6 border border-primary/30 animate-slide-in-up" style={{ animationDelay: '100ms' }}>
+            <h2 className="text-lg font-bold text-foreground mb-5 flex items-center gap-2">
+              <span className="w-2 h-2 bg-primary rounded-full animate-pulse"></span>
               Active Satellites
             </h2>
             <div className="space-y-3">
@@ -193,25 +200,26 @@ export default function SatelliteTracker() {
                 <button
                   key={sat.id}
                   onClick={() => setSelectedSatellite(sat)}
-                  className={`w-full text-left p-3 rounded-lg transition-all border ${
+                  className={`w-full text-left p-4 rounded-lg transition-all duration-300 border backdrop-blur-sm ${
                     selectedSatellite?.id === sat.id
-                      ? 'bg-primary/20 border-primary'
-                      : 'bg-background border-border hover:border-primary'
+                      ? 'bg-primary/20 border-primary shadow-lg shadow-primary/30 transform scale-105'
+                      : 'glass-effect border-border/50 hover:border-primary hover:bg-primary/10'
                   }`}
                 >
                   <div className="flex items-center gap-3">
                     <div
-                      className="w-3 h-3 rounded-full"
-                      style={{ backgroundColor: sat.color }}
+                      className="w-3 h-3 rounded-full shadow-lg animate-pulse"
+                      style={{ backgroundColor: sat.color, boxShadow: `0 0 10px ${sat.color}` }}
                     />
-                    <div>
-                      <p className="font-semibold text-sm">
+                    <div className="flex-1">
+                      <p className="font-semibold text-sm text-foreground">
                         {sat.name}
                       </p>
                       <p className="text-xs text-muted-foreground">
                         {sat.orbitalHeight.toFixed(2)}km
                       </p>
                     </div>
+                    <span className="px-2 py-1 rounded-full bg-primary/20 text-primary text-xs font-bold">Active</span>
                   </div>
                 </button>
               ))}
@@ -220,77 +228,74 @@ export default function SatelliteTracker() {
 
           {/* Selected Satellite Details */}
           {selectedSatellite && (
-            <div className="bg-card rounded-lg p-4 border border-border">
-              <h3 className="text-lg font-bold text-foreground mb-4">
-                {selectedSatellite.name}
-              </h3>
-              <div className="space-y-4">
-                <div>
-                  <p className="text-sm text-muted-foreground mb-1">
+            <div className="glass-effect rounded-2xl p-6 border border-primary/30 glow-effect animate-slide-in-up" style={{ animationDelay: '200ms' }}>
+              <div className="flex items-center gap-3 mb-6">
+                <div
+                  className="w-4 h-4 rounded-full"
+                  style={{ backgroundColor: selectedSatellite.color, boxShadow: `0 0 15px ${selectedSatellite.color}` }}
+                />
+                <h3 className="text-lg font-bold text-foreground">
+                  {selectedSatellite.name}
+                </h3>
+              </div>
+              <div className="space-y-5">
+                <div className="bg-background/50 rounded-lg p-4 border border-primary/20">
+                  <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-2">
                     Orbital Height
                   </p>
-                  <p className="text-lg font-semibold text-primary">
-                    {(selectedSatellite.orbitalHeight * 400).toFixed(0)} km
+                  <p className="text-2xl font-bold gradient-text">
+                    {(selectedSatellite.orbitalHeight * 400).toFixed(0)} <span className="text-sm text-muted-foreground">km</span>
                   </p>
                 </div>
-                <div>
-                  <p className="text-sm text-muted-foreground mb-1">
+                <div className="bg-background/50 rounded-lg p-4 border border-accent/20">
+                  <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-2">
                     Coverage Area
                   </p>
-                  <p className="text-lg font-semibold text-accent">
-                    {(selectedSatellite.coverage * 1000).toFixed(0)} km²
+                  <p className="text-2xl font-bold text-accent">
+                    {(selectedSatellite.coverage * 1000).toFixed(0)} <span className="text-sm text-muted-foreground">km²</span>
                   </p>
                 </div>
                 <div>
-                  <p className="text-sm text-muted-foreground mb-1">
+                  <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-3">
                     Signal Strength
                   </p>
-                  <div className="w-full bg-background rounded-full h-2">
+                  <div className="w-full bg-background/50 rounded-full h-2 overflow-hidden border border-primary/20">
                     <div
-                      className="bg-primary h-2 rounded-full"
+                      className="bg-gradient-to-r from-primary to-accent h-2 rounded-full transition-all duration-1000"
                       style={{
-                        width: `${Math.random() * 100}%`,
+                        width: `${80 + Math.sin(Date.now() / 1000) * 20}%`,
                       }}
                     />
                   </div>
                 </div>
-                <p className="text-xs text-muted-foreground leading-relaxed">
-                  This satellite provides global coverage with
-                  low-latency connectivity for emergency
-                  communications and disaster response.
+                <p className="text-xs text-muted-foreground leading-relaxed bg-background/30 rounded-lg p-3 border border-border/50">
+                  <span className="font-semibold text-primary">Global Coverage</span><br/>
+                  This satellite provides low-latency connectivity for emergency communications and disaster response.
                 </p>
               </div>
             </div>
           )}
 
           {/* Statistics */}
-          <div className="bg-card rounded-lg p-4 border border-border">
-            <h3 className="text-lg font-bold text-foreground mb-4">
-              Global Coverage
-            </h3>
-            <div className="space-y-3">
+          <div className="glass-effect rounded-2xl p-6 border border-primary/30 animate-slide-in-up" style={{ animationDelay: '300ms' }}>
+            <h3 className="text-lg font-bold text-foreground mb-6">Global Coverage</h3>
+            <div className="space-y-5">
               <div>
-                <div className="flex justify-between text-sm mb-1">
-                  <span className="text-muted-foreground">
-                    Coverage %
-                  </span>
-                  <span className="text-primary font-semibold">94%</span>
+                <div className="flex justify-between text-sm mb-2">
+                  <span className="text-muted-foreground font-semibold">Coverage</span>
+                  <span className="text-primary font-bold">94%</span>
                 </div>
-                <div className="w-full bg-background rounded-full h-2">
-                  <div className="bg-primary h-2 rounded-full w-11/12" />
+                <div className="w-full bg-background/50 rounded-full h-2 overflow-hidden border border-primary/20">
+                  <div className="bg-gradient-to-r from-primary to-cyan-400 h-2 rounded-full w-11/12" />
                 </div>
               </div>
               <div>
-                <div className="flex justify-between text-sm mb-1">
-                  <span className="text-muted-foreground">
-                    Latency
-                  </span>
-                  <span className="text-accent font-semibold">
-                    45ms
-                  </span>
+                <div className="flex justify-between text-sm mb-2">
+                  <span className="text-muted-foreground font-semibold">Latency</span>
+                  <span className="text-accent font-bold">45ms</span>
                 </div>
-                <div className="w-full bg-background rounded-full h-2">
-                  <div className="bg-accent h-2 rounded-full w-3/4" />
+                <div className="w-full bg-background/50 rounded-full h-2 overflow-hidden border border-accent/20">
+                  <div className="bg-gradient-to-r from-accent to-cyan-300 h-2 rounded-full w-3/4" />
                 </div>
               </div>
             </div>

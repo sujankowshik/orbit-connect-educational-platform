@@ -121,63 +121,70 @@ export default function Community() {
 
   return (
     <main className="min-h-screen bg-background pt-20">
-      <div className="max-w-6xl mx-auto px-4 py-8 space-y-8">
-        <div className="text-center space-y-2 mb-8">
-          <h1 className="text-4xl font-bold text-foreground">
+      <div className="max-w-7xl mx-auto px-4 py-12 space-y-10">
+        <div className="text-center space-y-4 mb-10 animate-slide-in-up">
+          <div className="inline-block px-4 py-2 rounded-full glass-effect text-accent text-sm font-semibold">
+            Shared Experiences
+          </div>
+          <h1 className="text-5xl font-bold gradient-text">
             Community Stories
           </h1>
-          <p className="text-muted-foreground">
+          <p className="text-lg text-muted-foreground">
             Share and discover real-world experiences with satellite technology
           </p>
         </div>
 
         {/* New Story Button */}
-        <Button
+        <button
           onClick={() => setShowNewStory(true)}
-          className="w-full sm:w-auto px-6"
+          className="px-8 py-4 bg-gradient-to-r from-primary to-accent text-primary-foreground rounded-lg font-bold hover:shadow-lg hover:shadow-primary/50 transition-all duration-300"
         >
           Share Your Story
-        </Button>
+        </button>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Story List */}
-          <div className="lg:col-span-2 space-y-3">
-            <h2 className="text-lg font-bold text-foreground mb-4">Stories</h2>
-            {sortedStories.map((story) => (
+          <div className="lg:col-span-2 space-y-4 animate-slide-in-up" style={{ animationDelay: '100ms' }}>
+            <div className="flex items-center justify-between">
+              <h2 className="text-2xl font-bold text-foreground">Community Stories</h2>
+              <span className="px-4 py-2 rounded-full bg-primary/20 text-primary text-sm font-bold">{sortedStories.length} Stories</span>
+            </div>
+            {sortedStories.map((story, idx) => (
               <button
                 key={story.id}
                 onClick={() => setSelectedStory(story)}
-                className={`w-full text-left p-4 rounded-lg border transition-all ${
+                className={`w-full text-left p-6 rounded-xl border-2 transition-all duration-300 transform hover:scale-102 ${
                   selectedStory?.id === story.id
-                    ? 'bg-primary/10 border-primary'
-                    : 'bg-card border-border hover:border-primary'
+                    ? 'glass-effect border-primary/80 bg-primary/20 glow-effect'
+                    : 'glass-effect border-border/50 hover:border-primary'
                 }`}
+                style={{ animationDelay: `${idx * 50}ms` }}
               >
-                <div className="space-y-2">
-                  <div className="flex items-start justify-between gap-2">
-                    <div>
-                      <h3 className="font-bold text-foreground">{story.title}</h3>
-                      <p className="text-xs text-muted-foreground">
-                        by {story.author} • {story.date}
+                <div className="space-y-3">
+                  <div className="flex items-start justify-between gap-3">
+                    <div className="flex-1 min-w-0">
+                      <h3 className="font-bold text-lg text-foreground">{story.title}</h3>
+                      <p className="text-sm text-muted-foreground mt-1">
+                        {story.author} • {story.date}
                       </p>
                     </div>
-                    <Badge className={getImpactColor(story.impact)}>
+                    <span className={`px-4 py-2 rounded-full text-xs font-bold whitespace-nowrap ${getImpactColor(story.impact)}`}>
                       {story.impact
                         .split('-')
                         .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
                         .join(' ')}
-                    </Badge>
+                    </span>
                   </div>
-                  <p className="text-sm text-muted-foreground line-clamp-2">
+                  <p className="text-sm text-muted-foreground leading-relaxed">
                     {story.description}
                   </p>
-                  <div className="flex gap-4 text-xs text-muted-foreground">
-                    <span className="flex items-center gap-1">
-                      <ThumbsUp className="w-3 h-3" />
+                  <div className="flex gap-6 text-sm text-muted-foreground pt-2 border-t border-primary/20">
+                    <span className="flex items-center gap-2 font-semibold">
+                      <ThumbsUp className="w-4 h-4" />
                       {story.votes}
                     </span>
-                    <span className="flex items-center gap-1">
-                      <MessageCircle className="w-3 h-3" />
+                    <span className="flex items-center gap-2 font-semibold">
+                      <MessageCircle className="w-4 h-4" />
                       {story.comments}
                     </span>
                   </div>
@@ -188,8 +195,8 @@ export default function Community() {
 
           {/* Story Details */}
           {selectedStory && (
-            <div className="lg:col-span-1 space-y-4">
-              <Card className="bg-card border-border p-6 space-y-4">
+            <div className="lg:col-span-1 space-y-4 animate-slide-in-up" style={{ animationDelay: '150ms' }}>
+              <div className="glass-effect border border-primary/30 rounded-2xl p-8 space-y-6 glow-effect sticky top-24">
                 <div>
                   <h2 className="text-xl font-bold text-foreground mb-1">
                     {selectedStory.title}
@@ -231,7 +238,7 @@ export default function Community() {
                     </Button>
                   </div>
                 </div>
-              </Card>
+              </div>
 
               {/* Story Content */}
               <Card className="bg-card border-border p-6">
