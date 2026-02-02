@@ -13,6 +13,10 @@ export default function Navigation() {
     { href: "/emergency-mode", label: "Emergency" },
     { href: "/disaster-cases", label: "Cases" },
     { href: "/calculator", label: "Calculator" },
+    { href: "/explorer", label: "Explorer" },
+    { href: "/dashboard", label: "Analytics" },
+    { href: "/leaderboard", label: "Leaderboard" },
+    { href: "/profile", label: "Profile" },
     { href: "/learn", label: "Learn" },
     { href: "/community", label: "Community" },
   ]

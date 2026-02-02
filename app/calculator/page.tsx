@@ -5,7 +5,8 @@ import { Card } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Slider } from '@/components/ui/slider'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts'
+import { BarChart, Bar, LineChart, Line, PieChart, Pie, Cell, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, AreaChart, Area } from 'recharts'
+import { TrendingUp, Download, Share2 } from 'lucide-react'
 
 export default function Calculator() {
   const [region, setRegion] = useState('rural')
@@ -51,6 +52,31 @@ export default function Calculator() {
       Satellite: costs.annualMaintenanceSatellite,
     },
   ]
+
+  const costBreakdown = [
+    { name: 'Traditional Setup', value: costs.traditionalSetup, color: '#888888' },
+    { name: 'Satellite Setup', value: costs.satelliteSetup, color: '#0ea5e9' },
+  ]
+
+  const lossComparisonData = [
+    {
+      name: 'No Satellite',
+      losses: costs.potentialDisasterLosses,
+      reduction: 0,
+    },
+    {
+      name: 'With Satellite',
+      losses: costs.potentialDisasterLosses - costs.satelliteLossReduction,
+      reduction: costs.satelliteLossReduction,
+    },
+  ]
+
+  const fiveYearProjection = Array.from({ length: 6 }).map((_, i) => ({
+    year: i,
+    satelliteCost: (costs.satelliteSetup + costs.annualMaintenanceSatellite * i) * 1000,
+    traditionalCost: (costs.traditionalSetup + costs.annualMaintenanceTraditional * i) * 1000,
+    savings: (costs.traditionalSetup - costs.satelliteSetup) * 1000 + (costs.annualMaintenanceTraditional - costs.annualMaintenanceSatellite) * i * 1000,
+  }))
 
   return (
     <main className="min-h-screen bg-background pt-20">
@@ -229,57 +255,189 @@ export default function Calculator() {
         </div>
 
         {/* Charts */}
-        <Card className="bg-card border-border p-6">
-          <h3 className="text-lg font-bold text-foreground mb-4">Cost Analysis</h3>
-          <ResponsiveContainer width="100%" height={300}>
-            <BarChart data={chartData}>
-              <CartesianGrid strokeDasharray="3 3" stroke="var(--color-border)" />
-              <XAxis dataKey="name" stroke="var(--color-muted-foreground)" />
-              <YAxis stroke="var(--color-muted-foreground)" />
-              <Tooltip
-                contentStyle={{
-                  backgroundColor: 'var(--color-card)',
-                  border: `1px solid var(--color-border)`,
-                  color: 'var(--color-foreground)',
-                }}
-              />
-              <Legend />
-              <Bar dataKey="Traditional" fill="var(--color-muted)" />
-              <Bar dataKey="Satellite" fill="var(--color-primary)" />
-            </BarChart>
-          </ResponsiveContainer>
-        </Card>
+        <div className="space-y-6">
+          {/* Tabs for different visualizations */}
+          <Tabs defaultValue="comparison" className="w-full">
+            <TabsList className="grid w-full grid-cols-3">
+              <TabsTrigger value="comparison">Cost Comparison</TabsTrigger>
+              <TabsTrigger value="losses">Loss Reduction</TabsTrigger>
+              <TabsTrigger value="projection">5-Year Projection</TabsTrigger>
+            </TabsList>
 
-        {/* Summary */}
-        <Card className="bg-gradient-to-r from-primary/5 to-accent/5 border-border p-6">
-          <h3 className="text-lg font-bold text-foreground mb-4">Key Findings</h3>
-          <ul className="space-y-3">
-            <li className="flex gap-3 text-sm">
-              <span className="text-primary font-bold">✓</span>
-              <span className="text-muted-foreground">
-                Satellite systems cost {Math.round(((costs.satelliteSetup / costs.traditionalSetup - 1) * 100) * -1)}% less to set up
-              </span>
-            </li>
-            <li className="flex gap-3 text-sm">
-              <span className="text-primary font-bold">✓</span>
-              <span className="text-muted-foreground">
-                Annual maintenance savings: ${(costs.annualMaintenanceTraditional - costs.annualMaintenanceSatellite).toLocaleString()}
-              </span>
-            </li>
-            <li className="flex gap-3 text-sm">
-              <span className="text-primary font-bold">✓</span>
-              <span className="text-muted-foreground">
-                Potential disaster loss reduction: ${costs.satelliteLossReduction.toLocaleString()}
-              </span>
-            </li>
-            <li className="flex gap-3 text-sm">
-              <span className="text-primary font-bold">✓</span>
-              <span className="text-muted-foreground">
-                5-year ROI: {costs.roi}%
-              </span>
-            </li>
-          </ul>
-        </Card>
+            <TabsContent value="comparison">
+              <div className="glass-effect border border-primary/30 rounded-2xl p-8 glow-effect">
+                <h3 className="text-lg font-bold text-foreground mb-6">Setup Cost Comparison</h3>
+                <ResponsiveContainer width="100%" height={350}>
+                  <BarChart data={chartData}>
+                    <CartesianGrid strokeDasharray="3 3" stroke="var(--color-border)" opacity={0.3} />
+                    <XAxis dataKey="name" stroke="var(--color-muted-foreground)" />
+                    <YAxis stroke="var(--color-muted-foreground)" />
+                    <Tooltip
+                      contentStyle={{
+                        backgroundColor: 'var(--color-card)',
+                        border: `1px solid var(--color-border)`,
+                        color: 'var(--color-foreground)',
+                        borderRadius: '8px',
+                      }}
+                      formatter={(value) => [`$${(value as number).toLocaleString()}`, '']}
+                    />
+                    <Legend />
+                    <Bar dataKey="Traditional" fill="#888888" radius={[8, 8, 0, 0]} />
+                    <Bar dataKey="Satellite" fill="#0ea5e9" radius={[8, 8, 0, 0]} />
+                  </BarChart>
+                </ResponsiveContainer>
+              </div>
+            </TabsContent>
+
+            <TabsContent value="losses">
+              <div className="glass-effect border border-primary/30 rounded-2xl p-8 glow-effect">
+                <h3 className="text-lg font-bold text-foreground mb-6">Disaster Loss Reduction</h3>
+                <ResponsiveContainer width="100%" height={350}>
+                  <AreaChart data={lossComparisonData}>
+                    <CartesianGrid strokeDasharray="3 3" stroke="var(--color-border)" opacity={0.3} />
+                    <XAxis dataKey="name" stroke="var(--color-muted-foreground)" />
+                    <YAxis stroke="var(--color-muted-foreground)" />
+                    <Tooltip
+                      contentStyle={{
+                        backgroundColor: 'var(--color-card)',
+                        border: `1px solid var(--color-border)`,
+                        color: 'var(--color-foreground)',
+                        borderRadius: '8px',
+                      }}
+                      formatter={(value) => [`$${(value as number).toLocaleString()}`, '']}
+                    />
+                    <Area type="monotone" dataKey="losses" stackId="1" stroke="#ef4444" fill="#ef4444" opacity={0.6} />
+                    <Area type="monotone" dataKey="reduction" stackId="1" stroke="#22c55e" fill="#22c55e" opacity={0.6} />
+                  </AreaChart>
+                </ResponsiveContainer>
+              </div>
+            </TabsContent>
+
+            <TabsContent value="projection">
+              <div className="glass-effect border border-primary/30 rounded-2xl p-8 glow-effect">
+                <h3 className="text-lg font-bold text-foreground mb-6">5-Year Cost Projection</h3>
+                <ResponsiveContainer width="100%" height={350}>
+                  <LineChart data={fiveYearProjection}>
+                    <CartesianGrid strokeDasharray="3 3" stroke="var(--color-border)" opacity={0.3} />
+                    <XAxis dataKey="year" stroke="var(--color-muted-foreground)" label={{ value: 'Year', position: 'insideBottomRight', offset: -5 }} />
+                    <YAxis stroke="var(--color-muted-foreground)" />
+                    <Tooltip
+                      contentStyle={{
+                        backgroundColor: 'var(--color-card)',
+                        border: `1px solid var(--color-border)`,
+                        color: 'var(--color-foreground)',
+                        borderRadius: '8px',
+                      }}
+                      formatter={(value) => [`$${(value as number).toLocaleString()}`, '']}
+                    />
+                    <Legend />
+                    <Line type="monotone" dataKey="satelliteCost" stroke="#0ea5e9" strokeWidth={3} dot={{ r: 4 }} name="Satellite Total Cost" />
+                    <Line type="monotone" dataKey="traditionalCost" stroke="#888888" strokeWidth={3} dot={{ r: 4 }} name="Traditional Total Cost" />
+                  </LineChart>
+                </ResponsiveContainer>
+              </div>
+            </TabsContent>
+          </Tabs>
+        </div>
+
+        {/* Summary & Actions */}
+        <div className="space-y-6">
+          <div className="glass-effect border border-primary/30 rounded-2xl p-8 glow-effect">
+            <div className="flex items-start justify-between mb-6">
+              <div>
+                <h3 className="text-2xl font-bold text-foreground mb-2 flex items-center gap-2">
+                  <TrendingUp className="w-6 h-6 text-primary" />
+                  Key Findings
+                </h3>
+                <p className="text-muted-foreground">Analysis for {region.toUpperCase()} region with {(populationSize / 1000).toFixed(0)}K population</p>
+              </div>
+              <div className="flex gap-3">
+                <button
+                  onClick={() => {
+                    const data = JSON.stringify(
+                      {
+                        region,
+                        populationSize,
+                        disasterFrequency,
+                        coverage,
+                        costs,
+                      },
+                      null,
+                      2
+                    )
+                    const blob = new Blob([data], { type: 'application/json' })
+                    const url = URL.createObjectURL(blob)
+                    const a = document.createElement('a')
+                    a.href = url
+                    a.download = `calculator-analysis-${region}-${Date.now()}.json`
+                    a.click()
+                  }}
+                  className="px-4 py-2 glass-effect text-foreground rounded-lg hover:border-primary transition-all border border-border/50"
+                >
+                  <Download className="w-4 h-4" />
+                </button>
+                <button className="px-4 py-2 glass-effect text-foreground rounded-lg hover:border-primary transition-all border border-border/50">
+                  <Share2 className="w-4 h-4" />
+                </button>
+              </div>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="bg-background/50 rounded-lg p-4 border border-primary/20">
+                <p className="text-sm text-muted-foreground mb-2">Setup Cost Savings</p>
+                <p className="text-3xl font-bold gradient-text">
+                  {Math.round(((costs.satelliteSetup / costs.traditionalSetup - 1) * 100) * -1)}%
+                </p>
+                <p className="text-xs text-muted-foreground mt-1">${(costs.traditionalSetup - costs.satelliteSetup).toLocaleString()} saved</p>
+              </div>
+              <div className="bg-background/50 rounded-lg p-4 border border-accent/20">
+                <p className="text-sm text-muted-foreground mb-2">Annual Maintenance Savings</p>
+                <p className="text-3xl font-bold text-accent">
+                  ${((costs.annualMaintenanceTraditional - costs.annualMaintenanceSatellite) / 1000).toFixed(0)}K
+                </p>
+                <p className="text-xs text-muted-foreground mt-1">per year</p>
+              </div>
+              <div className="bg-background/50 rounded-lg p-4 border border-green-500/20">
+                <p className="text-sm text-muted-foreground mb-2">Loss Reduction</p>
+                <p className="text-3xl font-bold text-green-500">
+                  ${(costs.satelliteLossReduction / 1000000).toFixed(1)}M
+                </p>
+                <p className="text-xs text-muted-foreground mt-1">5-year potential</p>
+              </div>
+              <div className="bg-background/50 rounded-lg p-4 border border-primary/20">
+                <p className="text-sm text-muted-foreground mb-2">5-Year ROI</p>
+                <p className="text-3xl font-bold text-primary">{costs.roi}%</p>
+                <p className="text-xs text-muted-foreground mt-1">return on investment</p>
+              </div>
+            </div>
+          </div>
+
+          <div className="glass-effect border border-primary/30 rounded-2xl p-8">
+            <h3 className="text-lg font-bold text-foreground mb-4">Recommendations</h3>
+            <ul className="space-y-3">
+              <li className="flex gap-3 items-start">
+                <span className="text-primary font-bold text-xl mt-1">✓</span>
+                <div>
+                  <p className="font-semibold text-foreground">Cost Efficiency</p>
+                  <p className="text-sm text-muted-foreground">Satellite systems cost {Math.round(((costs.satelliteSetup / costs.traditionalSetup - 1) * 100) * -1)}% less to set up and maintain</p>
+                </div>
+              </li>
+              <li className="flex gap-3 items-start">
+                <span className="text-accent font-bold text-xl mt-1">✓</span>
+                <div>
+                  <p className="font-semibold text-foreground">Disaster Resilience</p>
+                  <p className="text-sm text-muted-foreground">Potential disaster loss reduction of ${costs.satelliteLossReduction.toLocaleString()} over 5 years</p>
+                </div>
+              </li>
+              <li className="flex gap-3 items-start">
+                <span className="text-primary font-bold text-xl mt-1">✓</span>
+                <div>
+                  <p className="font-semibold text-foreground">Strong ROI</p>
+                  <p className="text-sm text-muted-foreground">Achieves {costs.roi}% ROI within 5 years through savings and loss prevention</p>
+                </div>
+              </li>
+            </ul>
+          </div>
+        </div>
       </div>
     </main>
   )
